@@ -25,6 +25,10 @@ public class CurrenciesLoader extends AsyncTask<String, Void, List<Currency>> {
         try {
             List<Currency> currencies = new ArrayList<>();
             Response<JsonObject> response = call.execute();
+            if (response.code() != 200) {
+                return null; // API Error occurred
+            }
+
             JsonObject jsonResponse = response.body();
             JsonObject jsonCurrencies = Objects.requireNonNull(jsonResponse).getAsJsonObject("symbols");
             for (String currencyCode : jsonCurrencies.keySet()) {

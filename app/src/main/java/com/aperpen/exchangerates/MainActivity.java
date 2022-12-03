@@ -41,7 +41,21 @@ public class MainActivity extends AppCompatActivity {
     protected void calculateRates() {
         Currency baseCurrency = (Currency) sCurrencies.getSelectedItem();
         new ExchangeRatesLoader() {
+            @Override
+            public void onPreExecute() {
+                erLoader.setVisibility(View.VISIBLE);
+            }
 
+            @Override
+            public void onPostExecute(List<ExchangeRate> rates) {
+                if (rates == null) {
+                    showErrorToast();
+                } else {
+                    ExchangeRateAdapter adapter = new ExchangeRateAdapter(getApplicationContext(), rates);
+                    lvRates.setAdapter(adapter);
+                    erLoader.setVisibility(View.INVISIBLE);
+                }
+            }
         }.execute(baseCurrency);
     }
 

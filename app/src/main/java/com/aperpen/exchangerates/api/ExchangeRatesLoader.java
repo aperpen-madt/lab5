@@ -28,6 +28,10 @@ public class ExchangeRatesLoader extends AsyncTask<Currency, Void, List<Exchange
         try {
             List<ExchangeRate> rates = new ArrayList<>();
             Response<JsonObject> response = call.execute();
+            if (response.code() != 200) {
+                return null; // API Error occurred
+            }
+
             JsonObject jsonResponse = response.body();
             JsonObject jsonRates = Objects.requireNonNull(jsonResponse).getAsJsonObject("rates");
 
